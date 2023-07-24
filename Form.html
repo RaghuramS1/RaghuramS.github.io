@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Form with Validation</title>
+    <style>
+        .error {
+            color: red;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Web Form with Validation</h1>
+    <form id="myForm" onsubmit="validateForm(event)">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <span class="error" id="nameError"></span>
+        </div>
+
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <span class="error" id="emailError"></span>
+        </div>
+
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <span class="error" id="passwordError"></span>
+        </div>
+
+        <div>
+            <label>Gender:</label>
+            <input type="radio" id="male" name="gender" value="male" required>
+            <label for="male">Male</label>
+            <input type="radio" id="female" name="gender" value="female" required>
+            <label for="female">Female</label>
+            <span class="error" id="genderError"></span>
+        </div>
+
+        <div>
+            <label for="country">Country:</label>
+            <select id="country" name="country" required>
+                <option value="">Select a country</option>
+                <option value="usa">USA</option>
+                <option value="canada">Canada</option>
+                <option value="uk">UK</option>
+            </select>
+            <span class="error" id="countryError"></span>
+        </div>
+
+        <div>
+            <label>
+                <input type="checkbox" id="agreement" name="agreement" required>
+                I agree to the terms and conditions.
+            </label>
+            <span class="error" id="agreementError"></span>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        function validateForm(event) {
+            event.preventDefault();
+            const form = document.getElementById('myForm');
+
+            // Reset previous errors
+            const errorElements = form.getElementsByClassName('error');
+            for (let i = 0; i < errorElements.length; i++) {
+                errorElements[i].textContent = '';
+            }
+
+            let isValid = true;
+
+            // Validate name
+            const nameInput = form.elements['name'];
+            if (nameInput.value.trim() === '') {
+                document.getElementById('nameError').textContent = 'Name is required.';
+                isValid = false;
+            }
+
+            // Validate email
+            const emailInput = form.elements['email'];
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailInput.value)) {
+                document.getElementById('emailError').textContent = 'Invalid email address.';
+                isValid = false;
+            }
+
+            // Validate password
+            const passwordInput = form.elements['password'];
+            if (passwordInput.value.length < 6) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 6 characters long.';
+                isValid = false;
+            }
+
+            // Validate gender
+            const genderInputs = form.querySelectorAll('input[name="gender"]');
+            if (!Array.from(genderInputs).some(input => input.checked)) {
+                document.getElementById('genderError').textContent = 'Please select your gender.';
+                isValid = false;
+            }
+
+            // Validate country
+            const countryInput = form.elements['country'];
+            if (countryInput.value === '') {
+                document.getElementById('countryError').textContent = 'Please select a country.';
+                isValid = false;
+            }
+
+            // Validate agreement checkbox
+            const agreementInput = form.elements['agreement'];
+            if (!agreementInput.checked) {
+                document.getElementById('agreementError').textContent = 'You must agree to the terms and conditions.';
+                isValid = false;
+            }
+
+            if (isValid) {
+                // If form is valid, you can submit the form here, or perform any other necessary actions.
+                alert('Form submitted successfully!');
+                form.reset(); // Optional: Clear the form after submission.
+            }
+        }
+    </script>
+</body>
+</html>
